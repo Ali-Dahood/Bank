@@ -1,45 +1,50 @@
 #include<iostream.h>
 #include<string.h>
-int ClockTime;
+/*
+This program is for managing tasks in the bank
+
+*/
+int ClockTime; // The time is default and changes according to the program
 using namespace std;
 class Bank;
 template <typename T>
 class queue;
-void PutTaskName(string &,int &,int);
-void PutPriority(string &,int);
+void PutTaskName(string &,int &,int); // Choice task name and put time for each one automatic
+void PutPriority(string &,int); // Choice what the priority for each person(Normal, Important, VIP)
 template <typename T>
-void PutTime(queue <T>&,int ,int);
+void PutTime(queue <T>&,int ,int); // Managing time
 template <typename T>
-void Order(queue <T>&);
+void Order(queue <T>&); // Sort tasks by arrival time
 template <typename T>
-int size(queue <T>);
+int size(queue <T>); // Size for each queue, to know who many task in the bank right now left and which are done.
 template <typename T>
-void notyetserved(queue <T>,queue <T>);
-void convertoHours(int );
+void notyetserved(queue <T>,queue <T>); // To know who many tasks left
+void convertoHours(int ); // To show clock while on because clock are just a number here
 enum errorcode{success,underflow,overflow,notfound};
 template<typename T>
-void AddRandomly(Bank temp[],int n,queue<T>,queue<T>,queue<T>);
+void AddRandomly(Bank temp[],int n,queue<T>,queue<T>,queue<T>); // Add randomly tasks with full details
 template <typename T>
-void Rearrange(queue <T>&);
-bool compare(string , string);
+void Rearrange(queue <T>&); // Rearrange tasks according to the priority
+bool compare(string , string); // compare 
 template <typename T>
-bool Right(queue <T>,int);
+bool Right(queue <T>,int); // Print the current Task
 template <typename T>
-void WaitTimeForTasks(queue <T>,queue <T>,queue<T>);
+void WaitTimeForTasks(queue <T>,queue <T>,queue<T>); //
 template <typename T>
-void TimeToFinish(queue <T>);
+void TimeToFinish(queue <T>);// Calculate the amount of time to finish all tasks
 template <typename T>
-void NotToday(queue <T>);
+void NotToday(queue <T>);// Print the tasks that can't be done today
 template <typename T>
-void ServedTasks(queue <T>);
+void ServedTasks(queue <T>); // Finish the current task
 template <typename T>
-void CarryOver(queue <T>&,queue <T>&);
+void CarryOver(queue <T>&,queue <T>&); // We need to check the task that can't be done today after
+// rearrange if they could be process today
 template <typename T>
-bool CheckID(queue <T>,queue<T>,queue<T>,int);
+bool CheckID(queue <T>,queue<T>,queue<T>,int); // to make sure no two tasks have the same ID
 template <typename T>
-void CarryOn(queue <T>&,queue<T>&);
+void CarryOn(queue <T>&,queue<T>&); // Obverse of CarryOver(Function above)
 template <class T>
-struct Node{
+struct Node{ //struct node is start
 	T data;
 	Node <T>*Next;
 	Node(){
@@ -49,9 +54,9 @@ struct Node{
 		data = item;
 		Next=0;
 	}
-};
+};// Struct node is finished
 template <class T>
-class queue{
+class queue{ // classqueue based on linked list is start
 	Node<T>*Front ,*Rear;
 	int count;
 	public:
@@ -105,9 +110,9 @@ class queue{
 		item=Rear->data;
 		return success;
 	}
-};
+}; // class of the queue is finished
 template <typename T>
-void queue<T>::operator=(queue &T1){
+void queue<T>::operator=(queue &T1){ // Destroy the current class and copy T1 to the current
 	while(!empty())
 	serve();
 	if(T1.Front!=0){
@@ -126,9 +131,9 @@ void queue<T>::operator=(queue &T1){
 		
 	}
 	
-}
+}// Operator is finished
 template <typename T>
-queue<T>::queue(queue &T1){
+queue<T>::queue(queue &T1){ // Copy constructor
 	Node <T>*newlist;
 	Node <T>*original=T1.Front;
 	if(T1.Front==0)
@@ -144,15 +149,15 @@ queue<T>::queue(queue &T1){
 		Rear=newlist;
 	}
 	
-}
-class Bank{
-	int TaskID;
-	string Taskname;
-	int ArrivalTime;
-	int WaitTime;
-	int StartTime;
-	int PeriodTime;
-	string Priority;
+}//copy constructor is Finished 
+class Bank{ // class of the Bank is start
+	int TaskID; // ID of the task
+	string Taskname; // Name of the task
+	int ArrivalTime; // When the customer arrival
+	int WaitTime; // How long on the customer have to wait
+	int StartTime; // When the task will start
+	int PeriodTime; // How long does it take (The task)
+	string Priority; // What the Priority of this customer
 	public:
 	Bank();
 	Bank(int,string,int,int,int,string);
@@ -173,7 +178,8 @@ class Bank{
 	string GetPriority();
 	
 	
-};
+};//Class of bank is finished
+// All methods of Bank are out of the class 
 void Bank::SetID(int TaskID){
 	this->TaskID=TaskID;
 }
@@ -216,7 +222,7 @@ int Bank::GetPeriodTime(){
 string Bank::GetPriority(){
 	return Priority;
 }
-Bank::Bank(){
+Bank::Bank(){// constructor with initial object
 		TaskID=0;
 		Taskname='\0';
 		ArrivalTime=0;
@@ -225,7 +231,7 @@ Bank::Bank(){
 		PeriodTime=0;
 		Priority='\0';
 }
-Bank::Bank(int TaskID,string Taskname,int WaitTime,int StartTime,int PeriodTime, string Priority){
+Bank::Bank(int TaskID,string Taskname,int WaitTime,int StartTime,int PeriodTime, string Priority){// constructor with parameters from the main
 		this->TaskID=TaskID;
 		this->Taskname=Taskname;
 		this->WaitTime=WaitTime;
@@ -233,7 +239,7 @@ Bank::Bank(int TaskID,string Taskname,int WaitTime,int StartTime,int PeriodTime,
 		this->PeriodTime=PeriodTime;
 		this->Priority=Priority;
 }
-istream & operator>>(istream &in,Bank &customer){
+istream & operator>>(istream &in,Bank &customer){ // operator cin for objects
 	int choice;
 	cout<<"Choice which Task you will have to do:\n";
 	cout<<"1- Credit.\n2- Debit.\n3- Query.\n4- Open an account.\n5- Close an account.\n";
@@ -278,19 +284,19 @@ istream & operator>>(istream &in,Bank &customer){
 			cin>>choice;
 		}
 	PutPriority(customer.Priority,choice);
-}
+}// operator is finished
 
-main(){
+main(){ // main is start
 	cout<<"Good morning Bank of Jerusalem at your service.\n";
 	ClockTime=8*60;
 	cout<<"clock Time: ";
      convertoHours(ClockTime);
      cout<<endl;
-	queue <Bank>Jerusalem;
-	queue <Bank>Done;
-	queue <Bank>Cannot;
+	queue <Bank>Jerusalem; // Name of the bank that will have the task that can be done today
+	queue <Bank>Done; // Tasks which they are done will transfer to Done 
+	queue <Bank>Cannot; // Tasks that can't be done today will transfer to Connot
 	int choice;
-	int arbiter=0;
+	int arbiter=0; // initial number for first operation to control time
 	cout<<"Choice 1 to add an Task. \n";
 	cout<<"Choice 2 to add an n Task randomly.\n";
 	cout<<"Choice 3 to Rearrange the bank by the Priority.\n";
@@ -303,9 +309,9 @@ main(){
 	cout<<"Choice 10 to know the information of all tasks not yet served.\n";
 	cout<<"Press 11 to stop the program.\n";
 	cin>>choice;
-	while(choice!=11){
-		switch(choice){
-			case 1:{
+	while(choice!=11){//  Menu of the bank is start ,while brackets start
+		switch(choice){ // switch brackets start
+			case 1:{ // start case 1
 				if(ClockTime>=14*60)
 				cout<<"The Bank is closed, see you tomorrow.\n";
 				else{
@@ -342,8 +348,8 @@ main(){
 				}
 				cout<<"***************\n\n";
 				break;
-			}
-			case 2:{
+			}// end case 1
+			case 2:{ // start case 2
 				if(ClockTime>=14*60)
 				cout<<"The Bank is closed, see you tomorrow.\n";
 				else{
@@ -385,8 +391,8 @@ main(){
 				}
 				cout<<"***************\n\n";
 				break;
-			}
-			case 3:{
+			}// end case 2
+			case 3:{// start case 3
 				if(Cannot.empty() && Jerusalem.empty())
 				cout<<"There is no Tasks yet.\n";
 				else
@@ -417,8 +423,8 @@ main(){
 				convertoHours(ClockTime);
 				cout<<"***************\n\n";
 				break;
-			}
-			case 4:{
+			}// end case 3
+			case 4:{// start case 4
 				Bank temp,temp1;
 				if(Jerusalem.Retrieve(temp1)==success){
 				Done.Append(temp1);
@@ -439,8 +445,8 @@ main(){
 				convertoHours(ClockTime);
 				cout<<"***************\n\n";
 				break;
-			}
-			case 5:{
+			}// end case 4
+			case 5:{// start case 5
 				if(Jerusalem.empty() && Cannot.empty() && Done.empty())
 				cout<<"There is no Tasks yet.\n";
 				else{
@@ -465,33 +471,33 @@ main(){
 				}
 				cout<<"***************\n\n";
 				break;
-			}
-			case 6:{
+			}// end case 5
+			case 6:{// start case 6
 				WaitTimeForTasks(Jerusalem,Done,Cannot);
 				cout<<"***************\n\n";
 				break;
-			}
-			case 7:{
+			}// end case 6
+			case 7:{// start csae 7
 			     TimeToFinish(Jerusalem);
 			     cout<<"***************\n\n";
 				break;
-			}
-			case 8:{
+			}// end case 7
+			case 8:{// start case 8
 				NotToday(Cannot);
 				cout<<"***************\n\n";
 				break;
-			}
-			case 9:{
+			}// end csae 8
+			case 9:{// start csae 9
 				ServedTasks(Done);
 				cout<<"***************\n\n";
 				break;
-			}
-			case 10:{
+			}// end case 9
+			case 10:{// start case 10
 				notyetserved(Jerusalem,Cannot);
 				cout<<"***************\n\n";
 				break;
-			}
-		}
+			}// end csae 10
+		}// swithc is done
 		cout<<"Choice 1 to add an Task. \n";
 	    cout<<"Choice 2 to add an n Task randomly.\n";
 	    cout<<"Choice 3 to Rearrange the bank by the Priority.\n";
@@ -504,11 +510,11 @@ main(){
      	cout<<"Choice 10 to know the information of all tasks not yet served.\n";
         cout<<"Press 11 to stop the program.\n";
      	cin>>choice;
-	}
+	}// Menu is finished,end while brackets
 	cout<<"See you tomorrow\n\n";
 	
 	
-}
+}// Main is finished
 void PutTaskName(string &our,int &PeriodTime,int choice	){
 	switch(choice){
 	case 1:{
@@ -577,18 +583,18 @@ void PutTime(queue <T>&jer,int z,int lasttime){
 	}
 	
 		Bank temp3[x];
-		for(int i=0;!temp2.empty();i++){
+		for(int i=0;!temp2.empty();i++){// need to transfet objects of tasks to array to putting time
 			temp2.Retrieve(temp3[i]);
 			temp2.serve();
 		}
 		for(int i=0;i<x;i++){
 			if(i==0){
-				if(z==0){
+				if(z==0){// first task have no time to wait to start it  
 					ClockTime=temp3[i].GetArrivalTime();
 					temp3[i].SetWaitTime(0);
 					temp3[i].SetStartTime(temp3[i].GetArrivalTime());
 				}
-				else{
+				else{// after first task
 				temp3[i].SetWaitTime(lasttime);
 				temp3[i].SetStartTime(temp3[i].GetArrivalTime()+temp3[i].GetWaiTtime());
 				}
@@ -614,14 +620,14 @@ void PutTime(queue <T>&jer,int z,int lasttime){
 template <typename T>
 int count(queue <T>q){
 	int c=0;
-	while(!q.empty()){
+	while(!q.empty()){// count how many tasks
 		q.serve();
 		c++;
 	}
 	return c;
 }
 template <typename T>
-void notyetserved(queue <T>out,queue<T>cannot){
+void notyetserved(queue <T>out,queue<T>cannot){// Print the tasks that not yet done
 	Bank temp;
 	int c=0;
 	while(!out.empty()){
@@ -662,8 +668,8 @@ void notyetserved(queue <T>out,queue<T>cannot){
 	cout<<"Every Task can be Done Today.\n";
 	else
 	cout<<c<<" Tasks not serverd and Can't be Done Today.\n";
-}
-void convertoHours(int x){
+}// end print (notyetserved)
+void convertoHours(int x){// print the time on the screen 
 	int hours=x/60;
 	x=x-hours*60;
 	cout<<hours<<":"<<x<<endl;
@@ -678,7 +684,7 @@ int size(queue <T>as){
 	return c;
 }
 template <typename T>
-void Order(queue <T>&jer){
+void Order(queue <T>&jer){// Arrange tasks by time of arrival
 	if(!jer.empty()){
 		int x=size(jer);
 		Bank aa[x];
@@ -699,9 +705,9 @@ void Order(queue <T>&jer){
 		for(int i=0;i<x;i++)
 		jer.Append(aa[i]);
 	}
-}
+}// end Order
 template<typename T>
-void AddRandomly(Bank temp[],int n,queue<T>temp1,queue<T>temp2,queue<T>temp3){
+void AddRandomly(Bank temp[],int n,queue<T>temp1,queue<T>temp2,queue<T>temp3){// Add random tasks
 	int now=false,past=false,j,x=100+(size(temp1)+size(temp2)+size(temp3))*2;
 	for(int i=0;i<n;i++){
 		temp[i].SetID(rand()%100+1);
@@ -734,9 +740,9 @@ void AddRandomly(Bank temp[],int n,queue<T>temp1,queue<T>temp2,queue<T>temp3){
 		PutPriority(name,rand()%3+1);
 		temp[i].SetPriority(name);
 	}
-}
+}// end AddRandomly
 template <typename T>
-void Rearrange(queue <T>&jer){
+void Rearrange(queue <T>&jer){ // arrange according to the priority
 	Bank temp;
 	queue <T>temp2;
 	while(!jer.empty()){
@@ -762,8 +768,8 @@ void Rearrange(queue <T>&jer){
 		temp2.serve();
 	}
 	
-}
-bool compare(string s1,string s2){
+}// end rearrange
+bool compare(string s1,string s2){// compare the priority name to reduce the time
 	int i;
 	for(i=0;s1[i]!=NULL && s2[i]!=NULL;i++){
 		if(s1[i]!=s2[i])
@@ -774,9 +780,9 @@ bool compare(string s1,string s2){
 	if(s1[i]!=NULL && s2[i]==NULL)
 	return false;
 	return true;
-}
+}// end compare
 template <typename T>
-bool Right(queue <T>jer,int x){
+bool Right(queue <T>jer,int x){// print the current task
 	Bank temp;
 	while(!jer.empty()){
 		jer.Retrieve(temp);
@@ -800,9 +806,9 @@ bool Right(queue <T>jer,int x){
 	}
 	return false;
 	
-}
+}// end Right
 template <typename T>
-void WaitTimeForTasks(queue <T>our,queue<T>sir,queue<T>cannot){
+void WaitTimeForTasks(queue <T>our,queue<T>sir,queue<T>cannot){// Calculate the expected WAIT_TIME for everyone
 	if(our.empty() && sir.empty() && cannot.empty())
 	cout<<"There is no Task yet.\n";
 	else{
@@ -838,9 +844,9 @@ void WaitTimeForTasks(queue <T>our,queue<T>sir,queue<T>cannot){
       	      convertoHours(z+n);
 	      }
 	}
-}
+}// end WaitTimeForTasks
 template <typename T>
-void TimeToFinish(queue <T>our){
+void TimeToFinish(queue <T>our){// Calculate time for remaining tasks
 	if(our.empty())
 	cout<<"The Bank is closed, see you tomorrow.\n";
 	else{
@@ -855,9 +861,9 @@ void TimeToFinish(queue <T>our){
 	   convertoHours(n);
 	   cout<<endl;
 	}
-}
+}// end TimeToFinished
 template <typename T>
-void NotToday(queue <T>cannot){
+void NotToday(queue <T>cannot){// can't be done time 
 	int x=0;
 	while(!cannot.empty()){
 		cannot.serve();
@@ -867,9 +873,9 @@ void NotToday(queue <T>cannot){
 	cout<<"Every Task can be Done Today.\n";
 	else
 	cout<<x<<" Tasks can't be Done Today.\n";
-}
+}// end NotToday
 template <typename T>
-void ServedTasks(queue <T>Done){
+void ServedTasks(queue <T>Done){// print the tasks that done today
 	int x=0;
 	Bank temp;
 	while(!Done.empty()){
@@ -893,7 +899,7 @@ void ServedTasks(queue <T>Done){
 	cout<<"There is no Task is Finished yet.\n";
 	else
 	cout<<x<<" Tasks is Finished Today.\n";
-}
+}// end ServedTasks
 template <typename T>
 void CarryOver(queue <T>&jer,queue <T>&cannot){
 	Bank temp;
@@ -924,7 +930,7 @@ void CarryOver(queue <T>&jer,queue <T>&cannot){
 	
 }
 template <typename T>
-bool CheckID(queue <T>temp1,queue<T>temp2,queue<T>temp3,int x){
+bool CheckID(queue <T>temp1,queue<T>temp2,queue<T>temp3,int x){// check ID if exist
 	Bank temp4;
 	while(!temp1.empty()){
 		temp1.Retrieve(temp4);
@@ -945,7 +951,7 @@ bool CheckID(queue <T>temp1,queue<T>temp2,queue<T>temp3,int x){
 		temp3.serve();
 	}
 	return true;
-}
+}// end check
 template <typename T>
 void CarryOn(queue <T>&jer,queue <T>&cannot){
 	Bank temp;
